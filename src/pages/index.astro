@@ -1,0 +1,75 @@
+---
+import "@/styles/globals.css";
+import Layout from "../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Header } from "@/components/header/Header";
+import { CardInfo } from "@/components/card/Card";
+import {
+  BadgeDollarSign,
+  BarChart3,
+  ShoppingBasket,
+  UsersRound,
+} from "lucide-react";
+import { Chart } from "@/components/chart/Chart";
+import { RecentSales } from "@/components/recentSales/RecentSales";
+import { ShapePieChart } from "@/components/chart/ShapeChart";
+import { Ticket } from "@/components/ticket/Ticket";
+---
+
+<Layout title="Welcome to Astro.">
+  <main>
+    <Header client:idle />
+    <div class="mt-20 ml-3 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <CardInfo
+        cardTitle="Total Revenue"
+        cardContent="$45,231.89"
+        cardContentAddition="+20.1% from last month"
+      >
+        <BadgeDollarSign />
+      </CardInfo>
+      <CardInfo
+        cardTitle="Current customers"
+        cardContent="2,345"
+        cardContentAddition="+20.1% from last month"
+      >
+        <UsersRound />
+      </CardInfo>
+      <CardInfo
+        cardTitle="Sales"
+        cardContent="+2,345"
+        cardContentAddition="+20.1% from last month"
+      >
+        <ShoppingBasket />
+      </CardInfo>
+      <CardInfo
+        cardTitle="Active Now"
+        cardContent="500"
+        cardContentAddition="+20.1% from last month"
+      >
+        <BarChart3 />
+      </CardInfo>
+    </div>
+    <div class="flex flex-row mt-2 ml-3">
+      <div
+        class="mr-5 rounded-lg border bg-card text-card-foreground shadow w-[49.1%] p-1 pl-0"
+      >
+        <h3
+          class="pb-0 tracking-tight text-xl font-extrabold pl-5 pt-3 pb-2 w-max"
+        >
+          Total Revenue
+        </h3>
+        <Chart client:idle />
+      </div>
+      <div
+        class="mr-5 rounded-lg border bg-card text-card-foreground shadow w-[300px] p-1 pl-0"
+      >
+        <h3 class="pb-0 tracking-tight text-xl font-extrabold pl-5 pt-3 w-max">
+          Sales
+        </h3>
+        <ShapePieChart client:load />
+      </div>
+      <RecentSales client:idle />
+    </div>
+	<Ticket client:idle />
+  </main>
+</Layout>
