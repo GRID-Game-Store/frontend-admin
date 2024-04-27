@@ -1,0 +1,22 @@
+---
+import "@/styles/globals.css";
+import Layout from "@/layouts/Layout.astro";
+import { GamesList } from "@/components/games/gamesList";
+import Paginations from "@/components/paginations/paginations.astro";
+import { GET } from '../api/games'
+import type { AllGameResponse } from "@/types/types";
+
+let response = await GET(Astro)
+const games : AllGameResponse  = (await response.json())
+
+---
+
+
+<Layout title="Games">
+  <main >
+    <div class="mt-20 ml-3 ">
+      <GamesList  games={games.games}/>
+      <Paginations   currentPage={games.currentPage} totalPages={games.totalPages} totalItems={games.totalItems}/>
+    </div>
+  </main>
+</Layout>

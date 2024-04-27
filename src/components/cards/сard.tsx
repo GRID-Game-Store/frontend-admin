@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DollarSign } from "lucide-react";
 interface ICardProps {
     cardTitle: string,
     cardContent: string,

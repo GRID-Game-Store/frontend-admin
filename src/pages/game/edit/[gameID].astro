@@ -1,0 +1,21 @@
+---
+import "@/styles/globals.css";
+import Layout from "@/layouts/Layout.astro";
+
+import type { AllGenreAndTagsResponse, GameInfoResponse } from "@/types/types";
+
+import { GET } from "@/pages/api/game";
+import { EditGame } from "@/components/editGame/editGame";
+import fetchData from "@/utils/fetchData";
+let response = await GET(Astro);
+
+const game: GameInfoResponse = await response.json();
+const allGenres : AllGenreAndTagsResponse = await fetchData("http://localhost:8082/api/v1/genres")
+const allTags : AllGenreAndTagsResponse = await fetchData("http://localhost:8082/api/v1/tags")
+console.log( allGenres);
+
+---
+
+<Layout title="Games">
+  <EditGame game={game} client:only="react" allGenres={allGenres} allTags={allTags}  />
+</Layout>

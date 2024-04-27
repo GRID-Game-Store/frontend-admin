@@ -1,15 +1,18 @@
-import { Bug, Gamepad2, LayoutGrid, LogOut, RefreshCw, Settings } from "lucide-react";
+import { Bug, Gamepad2, LayoutGrid, LogOut, RefreshCw, Settings, User, Users2 } from "lucide-react";
 import Logo from "../logo/logo";
-import { type ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
+import { signIn } from "auth-astro/client";
 
 interface ILinksProps {
   name: string;
   children: ReactElement;
+  isPagination?: boolean;
 }
 
-const Links: React.FC<ILinksProps> = ({ name, children }) => {
+const Links: React.FC<ILinksProps> = ({ name, children, isPagination = false }) => {
+  const link = name === "Overview" ? "/" : `/${name.toLocaleLowerCase()}${isPagination ? "?page=1" : ""}`; ;
   return (
-    <a href="#overview" className="flex flex-row items-center mt-5">
+    <a href={link} className="flex flex-row items-center mt-5">
       {children}
       <span className="text-lg font-semibold pl-3 hover:underline">{name}</span>
     </a>
@@ -17,8 +20,13 @@ const Links: React.FC<ILinksProps> = ({ name, children }) => {
 };
 
 const SideBar: React.FC = () => {
+  useEffect(() => {
+    setInterval(() => {
+      signIn("keycloak")
+    }, 282000)
+  }, []);
   return (
-    <div className="bg-black w-[250px] h-screen flex flex-col items-center pt-3 ">
+    <div className="bg-black w-[250px]  h-[170vh] flex flex-col items-center pt-3  ">
       <Logo />
       <div className="flex flex-col mt-5 text-white">
         <Links name={"Overview"}>
@@ -27,8 +35,11 @@ const SideBar: React.FC = () => {
         <Links name={"Transactions"}>
           <RefreshCw />
         </Links>
-        <Links name={"Games"}>
+        <Links name={"Games"} isPagination>
           <Gamepad2 />
+        </Links>
+        <Links name={"Users"} isPagination>
+          <Users2 />
         </Links>
         <Links name={"Reports"}>
           <Bug />
@@ -38,9 +49,9 @@ const SideBar: React.FC = () => {
         </Links>
       </div>
       <div className="absolute bottom-3 left-3 text-gray-400 hover:text-gray-100">
-      <Links name={"Logout"} >
+      {/* <Links name={"Logout"} >
             <LogOut />
-        </Links>
+        </Links> */}
       </div>
     </div>
   );

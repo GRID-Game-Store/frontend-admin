@@ -22,9 +22,10 @@ import {
   Calculator,
   Calendar,
   CreditCard,
+  LogOut,
   Settings,
   Smile,
-  User,
+  User as UserIcon,
 } from "lucide-react";
 import {
   ContextMenu,
@@ -32,13 +33,23 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-const Header: React.FC = () => {
+import { signIn, signOut } from "auth-astro/client";
+import type { User } from "@auth/core/types";
+import { handleLogOut } from "@/utils/logout";
+
+
+
+interface IHeaderProps {
+  title: string;
+  userData:  User | undefined; 
+}
+const Header: React.FC<IHeaderProps> = ({ title, userData }) => {
   return (
-      <div className="bg-white absolute w-[calc(100%-250px)] h-16  flex items-center justify-between pl-3 ">
+      <div className="bg-white absolute left-[250px] w-[calc(100%-250px)] h-16  flex items-center justify-between pl-3 ">
         <h1 className="scroll-m-20 text-1xl font-extrabold tracking-tight lg:text-2xl ">
-          Dashboard
+          {title}
         </h1>
-        <Command className=" absolute top-1 right-[200px] w-60 h-50">
+        <Command className=" absolute top-1 right-[200px] w-60 h-50 z-50">
           <CommandInput placeholder="Type a command or search..." />
           {/* <CommandList >
           <CommandEmpty>No results found.</CommandEmpty>
@@ -59,7 +70,7 @@ const Header: React.FC = () => {
           <CommandSeparator />
           <CommandGroup heading="Settings">
             <CommandItem>
-              <User className="mr-2 h-4 w-4" />
+              <UserIcon className="mr-2 h-4 w-4" />
               <span>Profile</span>
               <CommandShortcut>⌘P</CommandShortcut>
             </CommandItem>
@@ -76,19 +87,24 @@ const Header: React.FC = () => {
           </CommandGroup>
         </CommandList> */}
         </Command>
-        <DropdownMenu>
+        
+        <div className="flex ">
+       {userData && <DropdownMenu>
           <DropdownMenuTrigger className="relative right-20">
-            <User />
+            <UserIcon />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>{userData?.name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuItem>Team</DropdownMenuItem>
             <DropdownMenuItem>Subscription</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu>}
+        {!userData && <Button onClick={() => signIn("keycloak")} className="relative  right-[50px]">Login</Button>}
+        {userData && <Button onClick={() => handleLogOut()} className="relative  right-[50px] w-[50px] h-[30px] "><LogOut  /></Button>}
+        </div>
       </div>
   );
 };

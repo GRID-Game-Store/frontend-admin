@@ -50,5 +50,5 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
 ## 👀 Want to learn more?
-
+npx openapi-typescript http://localhost:8082/v3/api-docs  -o ./src/app/types/shema.d.ts
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

@@ -1,0 +1,77 @@
+---
+import "@/styles/globals.css";
+import Layout from "@/layouts/Layout.astro";
+import { GET } from "../api/game";
+import type { GameInfoResponse } from "@/types/types";
+let response = await GET(Astro);
+const game: GameInfoResponse = await response.json();
+
+import { Badge } from "@/components/ui/badge";
+import { Gallery } from "@/components/gallery/gallery";
+import { Button } from "@/components/ui/button";
+---
+
+<Layout title="Game">
+  <div class="mt-20 ml-3 flex flex-row w-max h-max space-x-2">
+    <div class="flex flex-col">
+      <Gallery gameMedia={game.gameMedia} client:load />
+      {
+        game.aboutGame && (
+          <>
+            <h2 class="pb-0 tracking-tight text-2xl font-extrabold">
+              About Game
+            </h2>
+            <p class="text-[16px] text-muted-foreground w-[700px] italic w-">
+              {game.aboutGame}
+            </p>
+          </>
+        )
+      }
+    </div>
+    <div class="">
+      <h1 class="pb-0 tracking-tight text-2xl font-extrabold">
+        {game.title}
+      </h1>
+      <p class="text-xl text-muted-foreground w-[500px] italic w-">
+        {game.description}
+      </p>
+      <p class="text-xl text-muted-primary font-bold w-96">
+        Publisher: {game.publisher.name}
+      </p>
+      <p class="text-xl text-muted-primary font-bold w-96">
+        Developer: {game.developer.name}
+      </p>
+      <p class="text-xl text-muted-primary font-bold w-96">
+        Release date: {game.releaseDate}
+      </p>
+      <div class="flex flex-row space-x-2 mb-1">
+        <p class="text-xl text-muted-primary font-bold">Genre:</p>
+        <div class="flex flex-row space-x-1">
+          {
+            game.genres &&
+              game.genres.map((genre) => <Badge>{genre.name}</Badge>)
+          }
+        </div>
+      </div>
+      <div class="flex flex-row space-x-2 mb-1">
+        <p class="text-xl text-muted-primary font-bold">Tags:</p>
+        <div class="flex flex-row flex-wrap w-96">
+          {
+            game.tags &&
+              game.tags.map((genre) => (
+                <Badge variant={"outline"} className="mt-1 ml-1">
+                  {genre.name}
+                </Badge>
+              ))
+          }
+        </div>
+      </div>
+      <p class="text-xl text-muted-primary font-bold">Price: {game.price}UAH</p>
+      <div>
+        <Button>Open in GRID</Button>
+        <Button variant={"secondary"}>Edit game</Button>
+        <Button variant={"destructive"}>Deactivate game</Button>
+      </div>
+    </div>
+  </div>
+</Layout>

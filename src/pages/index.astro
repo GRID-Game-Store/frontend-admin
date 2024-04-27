@@ -1,24 +1,21 @@
 ---
 import "@/styles/globals.css";
 import Layout from "../layouts/Layout.astro";
-import { Button } from "@/components/ui/button";
-import { Header } from "@/components/header/Header";
-import { CardInfo } from "@/components/card/Card";
+import { CardInfo } from "@/components/cards/сard";
 import {
   BadgeDollarSign,
   BarChart3,
   ShoppingBasket,
   UsersRound,
 } from "lucide-react";
-import { Chart } from "@/components/chart/Chart";
-import { RecentSales } from "@/components/recentSales/RecentSales";
-import { ShapePieChart } from "@/components/chart/ShapeChart";
-import { Ticket } from "@/components/ticket/Ticket";
+import { Chart } from "@/components/overview/chart/Chart";
+import { RecentSales } from "@/components/overview/recentSales/RecentSales";
+import { ShapePieChart } from "@/components/overview/chart/ShapeChart";
+import { Ticket } from "@/components/overview/ticket/Ticket";
 ---
 
-<Layout title="Welcome to Astro.">
-  <main>
-    <Header client:idle />
+<Layout title="Overview">
+  <main> 
     <div class="mt-20 ml-3 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <CardInfo
         cardTitle="Total Revenue"
@@ -70,6 +67,7 @@ import { Ticket } from "@/components/ticket/Ticket";
       </div>
       <RecentSales client:idle />
     </div>
-	<Ticket client:idle />
+	  <Ticket client:idle />
   </main>
+ 
 </Layout>

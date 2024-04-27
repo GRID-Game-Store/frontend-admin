@@ -1,0 +1,21 @@
+---
+import "@/styles/globals.css";
+import Layout from "../../layouts/Layout.astro";
+import { GamesList } from "@/components/games/gamesList";
+import { GET } from '../api/users'
+import type { UsersResponse } from "@/types/types";
+import { UsersList } from "@/components/users/userList";
+import Paginations from "@/components/paginations/paginations.astro";
+let response = await GET(Astro)
+const users : UsersResponse  = (await response.json())
+---
+
+
+<Layout title="Users">
+  <main class="relative" >
+    <div class="mt-20 ml-3 ">
+      <UsersList client:only="react" users={users.entities} />
+    </div>
+    {users.currentPage && users.totalPages ? <Paginations currentPage={users.currentPage+1} totalPages={users.totalPages+1} totalItems={users.totalItems}/> : null}
+  </main>
+</Layout>
