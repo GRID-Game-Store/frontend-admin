@@ -12,9 +12,11 @@ import { Button } from "@/components/ui/button";
 ---
 
 <Layout title="Game">
-  <div class="mt-20 ml-3 flex flex-row w-max h-max space-x-2">
+ 
+   <div class="mt-20 ml-3 flex flex-row w-max h-max space-x-2">
     <div class="flex flex-col">
-      <Gallery gameMedia={game.gameMedia} client:load />
+      
+      { game.gameMedia && <Gallery gameMedia={game.gameMedia} client:load />}
       {
         game.aboutGame && (
           <>
@@ -35,12 +37,12 @@ import { Button } from "@/components/ui/button";
       <p class="text-xl text-muted-foreground w-[500px] italic w-">
         {game.description}
       </p>
-      <p class="text-xl text-muted-primary font-bold w-96">
+      { game.publisher && <p class="text-xl text-muted-primary font-bold w-96">
         Publisher: {game.publisher.name}
-      </p>
-      <p class="text-xl text-muted-primary font-bold w-96">
+      </p>}
+      { game.developer && <p class="text-xl text-muted-primary font-bold w-96">
         Developer: {game.developer.name}
-      </p>
+      </p>}
       <p class="text-xl text-muted-primary font-bold w-96">
         Release date: {game.releaseDate}
       </p>
@@ -66,11 +68,36 @@ import { Button } from "@/components/ui/button";
           }
         </div>
       </div>
+      <div class="flex flex-row space-x-2 mb-1">
+        <p class="text-xl text-muted-primary font-bold">Platforms:</p>
+        <div class="flex flex-row flex-wrap w-96">
+          {
+            game.platforms &&
+              game.platforms.map((platform) => (
+                <Badge variant={"outline"} className="mt-1 ml-1">
+                  {platform.name}
+                </Badge>
+              ))
+          }
+        </div>
+      </div>
       <p class="text-xl text-muted-primary font-bold">Price: {game.price}UAH</p>
+      <p class="text-xl text-muted-primary font-bold w-96">
+        Permite age: {game.permitAge}
+      </p>
       <div>
         <Button>Open in GRID</Button>
-        <Button variant={"secondary"}>Edit game</Button>
-        <Button variant={"destructive"}>Deactivate game</Button>
+        <a href={`/game/edit/${game.id}`}>
+          <Button variant={"secondary"}>Edit game</Button>
+        </a>
+        {
+          game.active && (
+            <Button className="Deactivate" variant={"destructive"}>
+              Deactivate game
+            </Button>
+          )
+        }
+        {!game.active && <Button variant={"secondary"}>Activate game</Button>}
       </div>
     </div>
   </div>

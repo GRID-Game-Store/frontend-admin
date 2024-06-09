@@ -17,7 +17,6 @@ const ContextMenuUI: React.FC<IContextMenuUIProps> = ({children, id, field}) => 
       
         return item.id === id
     });
-    console.log(id, field.state.value);
     if (index !== -1) {
         field.setValue(field.state.value.toSpliced(index, 1));
     }

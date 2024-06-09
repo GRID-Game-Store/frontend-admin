@@ -8,17 +8,19 @@ import type { Payment } from "@/components/dataTable/types/types";
 let response = await GET(Astro);
 const page = Astro.url.searchParams.get("page")! || "";
 const transactions: TransactionsResponse = await response.json();
+
+
 ---
 
 <Layout title="Transactions">
   <main>
-    <div class="mt-20 ml-20">
+    <div class="mt-20 ml-20" >
       {transactions.entities && <DataTable
         client:load
         data={transactions.entities as unknown as Array<Payment>}
         currentPage={transactions.currentPage! + 1}
-        totalPages={transactions.totalPages! + 1}
-        totalItems={transactions.totalItems}
+        totalPages={transactions.totalPages!}
+        totalItems={transactions.totalItems }
         currentPageURL={+page}
       />}
     </div>

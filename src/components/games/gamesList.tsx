@@ -10,7 +10,7 @@ const GamesList: React.FC<IGamesListProps> = ({ games }) => {
     <div className="flex flex-wrap">
       {games &&
         games.map((game) => (
-          <GameCard
+          game && <GameCard
             description={game.description}
             imgUrl={game.coverImageUrl}
             title={game.title}

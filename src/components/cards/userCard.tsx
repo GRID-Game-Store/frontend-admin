@@ -31,7 +31,6 @@ const CardUser: React.FC<ICardUserProps> = ({ user }) => {
         <Button onClick={() => handleCopyID()} className=" w-full">
           Copy ID
         </Button>
-        <Button className=" w-full">Open in Panel</Button>
       </CardContent>
     </Card>
   );

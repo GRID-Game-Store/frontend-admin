@@ -7,9 +7,9 @@ export const GET: APIRoute = async ({ params, request, url }) => {
   const accessToken = session?.access_token;
  
   if (session) {
-    const page = url.searchParams.get('page')! || '';
+    const page:number = Number(url.searchParams.get('page')) || 1;
     const data = await fetch(
-      `http://localhost:8082/api/v1/admin/games?page=${page}&size=${pageSize}`,
+      `http://localhost:8082/api/v1/admin/games?page=${page - 1}&size=${pageSize}`,
       {
         method: "GET",
         headers: {

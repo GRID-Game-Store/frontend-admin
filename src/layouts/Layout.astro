@@ -1,14 +1,19 @@
 ---
+
 import { Header } from "@/components/header/Header";
 import { SideBar } from "@/components/sidebar/SideBar";
-import { getSession } from "auth-astro/server";
+import { Unauthorized } from "@/components/unauthorized/unauthorized";
+import { getSession } from "@/utils/getSession";
+import { handleLogOut } from "@/utils/logout";
+import { signIn } from "auth-astro/client";
 
 interface Props {
   title: string;
 }
-const session = await getSession(Astro.request);
-
+const session = await getSession(Astro);
 const { title } = Astro.props;
+const sessionUserData = !session?.error ? session?.user : undefined
+
 ---
 
 <!doctype html>
@@ -24,14 +29,12 @@ const { title } = Astro.props;
   <body>
     <div class="flex flex-row">
       <div class="flex flex-col">
-        <Header client:idle title={title} userData={session?.user} />
+        <Header client:idle title={title} userData={sessionUserData} />
         <SideBar client:idle />
       </div>
-      <slot />
+      {sessionUserData ? <slot /> : <Unauthorized />}
     </div>
-    
   </body>
-
 </html>
 <style is:global>
   @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans:ital@0;1&display=swap");

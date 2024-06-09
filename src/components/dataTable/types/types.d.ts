@@ -13,4 +13,6 @@ interface IDataTableProps {
   totalPages?: number;
   totalItems?: number;
   currentPageURL: number;
+  width?: string;
+  mode?: "large" | "small";
 }

@@ -1,6 +1,7 @@
 import {
   Bar,
   BarChart,
+  Cell,
   Label,
   Pie,
   PieChart,
@@ -11,27 +12,31 @@ import {
 } from "recharts";
 
 const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
+  { name: "STRIPE", value: 17, fill: "#0088FE", className:"fill-secondary" },
+  { name: "PAYPAL", value: 19 },
 ];
 
-export const ShapePieChart = () => {
+interface ShapePieChart {
+  dataPipeChart: any
+  amount: number
+}
+
+
+export const ShapePieChart : React.FC<ShapePieChart> = ({dataPipeChart, amount}) => {
   return (
     <ResponsiveContainer max-width="50%" height={350} className="w-auto">
-      <PieChart data={data}>
+      <PieChart data={dataPipeChart}>
         <Pie
-          data={data}
+          data={dataPipeChart}
           cx="50%"
           cy="50%"
           innerRadius={60}
           outerRadius={100}
           className="fill-primary"
           dataKey="value"
-          label
+
         >
-          <Label value="350" position="center" className="text-3xl font-bold color-black" />
+          <Label value={amount} position="center" className="text-3xl font-bold color-black" />
         </Pie>
       </PieChart>
     </ResponsiveContainer>

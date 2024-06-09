@@ -7,14 +7,20 @@ import type { AllGenreAndTagsResponse, GameInfoResponse } from "@/types/types";
 import { GET } from "@/pages/api/game";
 import { EditGame } from "@/components/editGame/editGame";
 import fetchData from "@/utils/fetchData";
+import { AddNewGame } from "@/components/addNew/addNewGame";
 let response = await GET(Astro);
 
-const game: GameInfoResponse = await response.json();
+
 const allGenres : AllGenreAndTagsResponse = await fetchData("http://localhost:8082/api/v1/genres")
 const allTags : AllGenreAndTagsResponse = await fetchData("http://localhost:8082/api/v1/tags")
 const allPlatforms : AllGenreAndTagsResponse = await fetchData("http://localhost:8082/api/v1/platforms")
+const allDevelopers : AllGenreAndTagsResponse = await fetchData("http://localhost:8082/api/v1/developers")
+const allPublishers : AllGenreAndTagsResponse = await fetchData("http://localhost:8082/api/v1/publishers")
+
+
+
 ---
 
-<Layout title="Games">
-  <EditGame game={game} client:only="react" allGenres={allGenres} allTags={allTags} allPlatforms={allPlatforms}  />
+<Layout title="Game">
+    <AddNewGame client:only="react" allGenres={allGenres} allTags={allTags} allPlatforms={allPlatforms} allDevelopers={allDevelopers} allPublishers={allPublishers} />
 </Layout>

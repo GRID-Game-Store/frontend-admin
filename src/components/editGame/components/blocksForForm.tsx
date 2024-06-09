@@ -45,6 +45,7 @@ export const TextareaForEdit: React.FC<ITextareaForEditProps> = ({
           value={field.state.value}
           rows={5}
           onBlur={field.handleBlur}
+          placeholder={role === "description" ? "Description" : ""}
           onChange={(e) => field.handleChange(e.target.value)}
           className={`text-xl text-muted-foreground w-[${width}px] italic w- rounded-lg border bg-card text-card-foreground shadow`}
         />
@@ -67,6 +68,7 @@ export const InputForEdit: React.FC<IInputForEditProps> = ({
           value={field.state.value}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
+          placeholder={role === "title" ? "Title" : ""}
           className={`pb-0 tracking-tight text-2xl font-extrabold mb-1 ${additionClassName} rounded-lg border bg-card text-card-foreground shadow`}
         />
       )}
@@ -75,14 +77,18 @@ export const InputForEdit: React.FC<IInputForEditProps> = ({
 };
 
 export const CalendarGameReleaseDate: React.FC<{ form?: any }> = ({ form }) => {
-  const releaseDate = form?.getFieldValue("releaseDate");
-  const dateStringToDate = (dateString : string) => {
-    const parts = dateString.split("-"); 
-    const day = parseInt(parts[0], 10); 
-    const month = parseInt(parts[1], 10) - 1; 
-    const year = parseInt(parts[2], 10); 
-    return new Date(year, month, day);
+  const dateStringToDate = (dateString: string | undefined) => {
+    if (dateString) {
+      const parts = dateString.split("-");
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      return new Date(year, month, day);
+    } else {
+      return new Date();
+    }
   };
+
   return (
     <form.Field name="releaseDate">
       {(field: any) => (
@@ -124,10 +130,10 @@ export const MetaDataGame: React.FC<IMetaDataGameProps> = ({
 };
 
 export const GenreAndTags: React.FC<IGenreAndTagsProps> = ({
-  items,
   type,
   allGenreOrTags,
   form,
+  max = 0,
 }) => {
   const isTags = type === "Tags";
   const classNameForTagsWrapper = isTags && "w-96";
@@ -139,7 +145,7 @@ export const GenreAndTags: React.FC<IGenreAndTagsProps> = ({
       {(field: any) => {
         return (
           <>
-            <p className="text-xl text-muted-primary font-bold">{type}</p>
+            <p className="text-xl text-muted-primary font-bold">{type}:</p>
             <div
               className={`flex flex-row flex-wrap items-center  ${classNameForTagsWrapper}`}
             >
@@ -155,6 +161,7 @@ export const GenreAndTags: React.FC<IGenreAndTagsProps> = ({
                 <AddNewTagOrGenre
                   allGenreOrTags={allGenreOrTags}
                   field={field}
+                  max={max}
                 />
               </div>
             </div>
@@ -165,13 +172,86 @@ export const GenreAndTags: React.FC<IGenreAndTagsProps> = ({
   );
 };
 
-export const SetNewPrice: React.FC<ISetNewPriceProps> = ({ form }) => {
+const DrawerForEdit = ({ form, title }: { form: any; title: string }) => {
   const [open, setOpen] = useState(false);
-
   const maxDiscount = 90;
   const minDiscount = 0;
   const discountIndex = 15;
 
+  const handleIncrement = (field: any) => {
+    maxDiscount > field.state.value &&
+      field.handleChange(+field.state.value + discountIndex);
+  };
+
+  return (
+    <form.Field name={title}>
+      {(field: any) => {
+        return (
+          <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild>
+              <Button onClick={() => setOpen(true)}>Change {title}</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader>
+                  <DrawerTitle>Change {title}</DrawerTitle>
+                  <DrawerDescription>
+                    Set {title} for this game
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="p-4 pb-0">
+                  <div className="flex items-center justify-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 shrink-0 rounded-full"
+                      onClick={() =>
+                        field.state.value > minDiscount &&
+                        field.handleChange(field.state.value - discountIndex)
+                      }
+                    >
+                      <Minus className="h-4 w-4" />
+                      <span className="sr-only">Decrease</span>
+                    </Button>
+                    <div className="flex-1 text-center">
+                      <div className="text-7xl font-bold tracking-tighter">
+                        {field.state.value + "%"}
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 shrink-0 rounded-full"
+                      onClick={() => handleIncrement(field)}
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span className="sr-only">Increase</span>
+                    </Button>
+                  </div>
+                </div>
+                <DrawerFooter>
+                  <Button
+                    type="submit"
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    Submit
+                  </Button>
+                  <DrawerClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        );
+      }}
+    </form.Field>
+  );
+};
+
+export const SetNewPrice: React.FC<ISetNewPriceProps> = ({ form }) => {
   return (
     <>
       <Label className="text-xl text-muted-primary font-bold" htmlFor="email">
@@ -191,77 +271,7 @@ export const SetNewPrice: React.FC<ISetNewPriceProps> = ({ form }) => {
             />
           )}
         />
-        <form.Field name={"discount"}>
-          {(field: any) => {
-            return (
-              <Drawer open={open} onOpenChange={setOpen}>
-                <DrawerTrigger asChild>
-                  <Button onClick={() => setOpen(true)}>Change discount</Button>
-                </DrawerTrigger>
-                <DrawerContent>
-                  <div className="mx-auto w-full max-w-sm">
-                    <DrawerHeader>
-                      <DrawerTitle>Change discount</DrawerTitle>
-                      <DrawerDescription>
-                        Set discount for this game
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <div className="p-4 pb-0">
-                      <div className="flex items-center justify-center space-x-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-8 w-8 shrink-0 rounded-full"
-                          onClick={() =>
-                            field.state.value > minDiscount &&
-                            field.handleChange(
-                              field.state.value - discountIndex
-                            )
-                          }
-                        >
-                          <Minus className="h-4 w-4" />
-                          <span className="sr-only">Decrease</span>
-                        </Button>
-                        <div className="flex-1 text-center">
-                          <div className="text-7xl font-bold tracking-tighter">
-                            {field.state.value} %
-                          </div>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-8 w-8 shrink-0 rounded-full"
-                          onClick={() =>
-                            field.state.value < maxDiscount &&
-                            field.handleChange(
-                              field.state.value + discountIndex
-                            )
-                          }
-                        >
-                          <Plus className="h-4 w-4" />
-                          <span className="sr-only">Increase</span>
-                        </Button>
-                      </div>
-                    </div>
-                    <DrawerFooter>
-                      <Button
-                        type="submit"
-                        onClick={() => {
-                          setOpen(false);
-                        }}
-                      >
-                        Submit
-                      </Button>
-                      <DrawerClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                      </DrawerClose>
-                    </DrawerFooter>
-                  </div>
-                </DrawerContent>
-              </Drawer>
-            );
-          }}
-        </form.Field>
+        <DrawerForEdit form={form} title="discount" />
       </div>
     </>
   );

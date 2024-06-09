@@ -1,92 +1,29 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "../../ui/button";
+import { DataTable } from "@/components/dataTable/dataTable";
+import type { Payment } from "@/components/dataTable/types/types";
 
-const RecentSales = () => {
+
+interface IRecentSalesProps {
+  transactions : any
+}
+const RecentSales : React.FC<IRecentSalesProps> = ({transactions}) => {
+
   return (
-    <div className="space-y-5 bg-white p-2 rounded-lg border bg-card text-card-foreground shadow w-[300px] p-1 flex justify-center flex-col ">
+    <div className="space-y-5 bg-white  rounded-lg border bg-card text-card-foreground shadow w-[300px] p-2 flex  flex-col justify-start ">
       <h3 className="tracking-tight text-xl font-extrabold w-max ">
-        Total Revenue{" "}
+        Recent Sales
       </h3>
-      <div className="flex items-center mt-[1000px]">
-        <Avatar>
-          <AvatarImage
-            width={32}
-            className="rounded-lg"
-            src="https://github.com/shadcn.png"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Olivia Martin</p>
-          <p className="text-sm text-muted-foreground">
-            olivia.martin@email.com
-          </p>
-        </div>
-        <div className="ml-auto font-medium">+$1,999.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar>
-          <AvatarImage
-            width={32}
-            className="rounded-lg"
-            src="https://github.com/shadcn.png"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Jackson Lee</p>
-          <p className="text-sm text-muted-foreground">jackson.lee@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$39.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar>
-          <AvatarImage
-            width={32}
-            className="rounded-lg"
-            src="https://github.com/shadcn.png"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-          <p className="text-sm text-muted-foreground">
-            isabella.nguyen@email.com
-          </p>
-        </div>
-        <div className="ml-auto font-medium">+$299.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar>
-          <AvatarImage
-            width={32}
-            className="rounded-lg"
-            src="https://github.com/shadcn.png"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">William Kim</p>
-          <p className="text-sm text-muted-foreground">will@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$99.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar>
-          <AvatarImage
-            width={32}
-            className="rounded-lg"
-            src="https://github.com/shadcn.png"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Sofia Davis</p>
-          <p className="text-sm text-muted-foreground">sofia.davis@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$39.00</div>
-      </div>
-      <Button>View all</Button>
+      {transactions.entities && <DataTable
+        data={transactions.entities as unknown as Array<Payment>}
+        currentPage={transactions.currentPage! + 1}
+        totalPages={transactions.totalPages! + 1}
+        totalItems={transactions.totalItems}
+        width="230"
+        currentPageURL={1}
+        mode="small"
+      />}
+      <Button onClick={() => window.location.href = '/transactions?page=1&pageSize=20'} >View all</Button>
     </div>
   );
 };

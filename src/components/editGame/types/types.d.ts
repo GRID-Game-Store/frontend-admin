@@ -6,13 +6,12 @@ export interface IEditGameProps {
   game: GameInfoResponse;
   allGenres: AllGenreAndTagsResponse;
   allTags: AllGenreAndTagsResponse;
+  allPlatforms: AllGenreAndTagsResponse;
 }
 export interface IAboutGameProps {
-  text?: string;
   form?: any;
 }
 export interface ITextareaForEditProps {
-  text?: string;
   width?: string;
   role?: string;
   form?: any;
@@ -39,10 +38,9 @@ export interface IMetaDataGameProps {
 }
 
 export interface IGenreAndTagsProps {
-  items: GameInfoResponse["genres"];
-  type: "Genres" | "Tags";
+  type: "Genres" | "Tags" | "Platforms" | "Publisher" | "Developer";
   allGenreOrTags: AllGenreAndTagsResponse; 
-
+  max?: number;
   form?: any;
 }
 

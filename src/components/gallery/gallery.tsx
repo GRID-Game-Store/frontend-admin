@@ -1,5 +1,6 @@
 import React from "react";
 import { CarouselGallery } from "../carousel/carousel";
+import notFound from '@/../public/404.png';
 
 interface IPreviewState {
   previewSrc: string;
@@ -12,14 +13,15 @@ const Gallery: React.FC<any> = ({ gameMedia }) => {
     previewSrc: gameMedia.bannerUrl,
     format: "image",
   });
-
+  const anyImage = gameMedia.bannerUrl || gameMedia.trailer || gameMedia.screenshotUrl || gameMedia.trailerScreenshot;
+  
   return (
-    <div className="flex flex-col w-[720px]">
+    <div className={`flex flex-col w-[720px]  ${ !anyImage && "justify-center items-center"}`}>
       {previewSrc.format === "image" ? (
         <img
-          width={710}
+          width={ previewSrc.previewSrc && anyImage ? 710 : 300}
           className="rounded mb-2 cursor-pointer "
-          src={`${previewSrc.previewSrc}`}
+          src={`${previewSrc.previewSrc || notFound.src}`}
           alt=""
         />
       ) : (
@@ -30,7 +32,7 @@ const Gallery: React.FC<any> = ({ gameMedia }) => {
           src={`${previewSrc.previewSrc}`}
         />
       )}
-      <CarouselGallery setPreviewSrc={setPreviewSrc} gameMedia={gameMedia} />
+      {anyImage && <CarouselGallery setPreviewSrc={setPreviewSrc} gameMedia={gameMedia} />}
     </div>
   );
 };

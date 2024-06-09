@@ -23,21 +23,26 @@ const pagination = (count: number) => (page: number, total: number) => {
     ...(end < total - 1 ? [total] : end < total ? [total] : []),
   ];
 };
+
+const paginationPreviousPage =
+  currentPage  > 0 ? currentPage  : currentPage + 1;
+const paginationNextPage =
+  currentPage + 1 < totalPages ? currentPage + 2 : currentPage + 1;
 ---
 
-<Pagination className="fixed right-0 bottom-10 mt-2 " >
+<Pagination className="fixed right-0 bottom-10 mt-2 ">
   <PaginationContent className="bg-slate-50 p-1 rounded">
     <PaginationItem>
-      <PaginationPrevious href={`?page=${currentPage - 1}`} />
+      <PaginationPrevious href={`?page=${paginationPreviousPage}`} />
     </PaginationItem>
     <PaginationItem>
       {
-        pagination(5)(currentPage, totalPages).map((element) => {
+        pagination(5)(currentPage + 1, totalPages).map((element) => {
           return (
             <PaginationItem>
               <PaginationLink
                 href={`?page=${element}`}
-                isActive={currentPage === element}
+                isActive={currentPage + 1 === element}
               >
                 {element}
               </PaginationLink>
@@ -45,10 +50,9 @@ const pagination = (count: number) => (page: number, total: number) => {
           );
         })
       }
-      <PaginationEllipsis />
     </PaginationItem>
     <PaginationItem>
-      <PaginationNext href=`?page=${currentPage+1}` />
+      <PaginationNext href=`?page=${paginationNextPage}` />
     </PaginationItem>
   </PaginationContent>
 </Pagination>

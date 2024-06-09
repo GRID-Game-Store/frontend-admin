@@ -16,8 +16,8 @@ async function refreshAccessToken(token) {
   });
  
 
+
   const refreshToken = await resp.json();
-  //console.log(refreshToken);
   if (!resp.ok) throw refreshToken;
 
   return {
@@ -27,6 +27,7 @@ async function refreshAccessToken(token) {
     expires_at: Math.floor(Date.now() / 1000) + refreshToken.expires_in,
     refresh_token: refreshToken.refresh_token,
   };
+  
 }
 
 export default defineConfig({

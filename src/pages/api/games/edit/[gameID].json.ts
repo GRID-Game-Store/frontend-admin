@@ -7,8 +7,7 @@ export const PUT: APIRoute = async ({ params, request, url }) => {
 
   
   const body = await request.json();
-  console.log(body);
-  console.log(accessToken);
+
   
   if (session) {
     const data = await fetch(

@@ -50,12 +50,13 @@ const data = [
     total: Math.floor(Math.random() * 5000) + 1000,
   },
 ]
-
-export const Chart = () => {
+interface IChartProps {
+  dataChartState: any
+}
+export const Chart: React.FC<IChartProps> = ({dataChartState}) => {
   return (
-    <ResponsiveContainer max-width="50%" height={350} className="w-auto">
-        
-      <BarChart data={data}>
+    <ResponsiveContainer max-width="50%" height={410} className="w-auto">
+      <BarChart data={dataChartState}>
         <XAxis
           dataKey="name"
           stroke="#888888"
@@ -68,7 +69,7 @@ export const Chart = () => {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) => `${value} ₴`}
         />
         <Bar
           dataKey="total"

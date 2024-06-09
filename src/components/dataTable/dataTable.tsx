@@ -36,14 +36,14 @@ import {
 import { columns } from "./columns";
 import type { IDataTableProps } from "./types/types";
 
-
-
 export const DataTable: React.FC<IDataTableProps> = ({
   data,
   currentPage,
   totalPages,
   totalItems,
   currentPageURL,
+  width = "[calc(100vw-500px)]",
+  mode = "large",
 }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -74,43 +74,47 @@ export const DataTable: React.FC<IDataTableProps> = ({
   });
 
   return (
-    <div className="w-[1100px]">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter user id..."
-          value={(table.getColumn("userId")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("userId")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    <div className={`w-${width} ${mode === "large" ? "min-w-[1100px]" : ""}`}>
+      {mode === "large" && (
+        <div className="flex items-center py-4">
+          <Input
+            placeholder="Filter user id..."
+            value={
+              (table.getColumn("userId")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("userId")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -161,23 +165,25 @@ export const DataTable: React.FC<IDataTableProps> = ({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {currentPage} of {totalPages} pages
+      {mode === "large" && totalPages ? (
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="flex-1 text-sm text-muted-foreground">
+            {currentPage} of {totalPages} pages
+          </div>
+          <div className="space-x-2">
+            {currentPageURL - 1 !== 0  && (
+              <a className="text-sm " href={`?page=${currentPageURL - 1}&pageSize=20`}>
+                Previous{" "}
+              </a>
+            )}
+            {currentPageURL + 1  <= totalPages && (
+              <a className="text-sm " href={`?page=${currentPageURL + 1}&pageSize=20`}>
+                Next{" "}
+              </a>
+            )}
+          </div>
         </div>
-        <div className="space-x-2">
-          {currentPageURL - 1 !== -1 && (
-            <a className="text-sm " href={`?page=${currentPageURL - 1}`}>
-              Previous{" "}
-            </a>
-          )}
-          {currentPageURL + 1 === totalPages && (
-            <a className="text-sm " href={`?page=${currentPageURL + 1}`}>
-              Next{" "}
-            </a>
-          )}
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 };

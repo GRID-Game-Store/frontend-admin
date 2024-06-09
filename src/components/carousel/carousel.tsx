@@ -37,7 +37,7 @@ const CarouselGallery: React.FC<ICarouselGalleryProps> = ({ gameMedia, setPrevie
             <div className="p-1">
               <Card className="overflow-hidden" >
                 <CardContent className="flex p-0 overflow-hidden ">
-                  <img width={"400px"} src={gameMedia?.bannerUrl} alt=""  />
+                  <img width={"400px"} src={  gameMedia?.bannerUrl} alt=""  />
                 </CardContent>
               </Card>
             </div>

@@ -2,14 +2,12 @@ import type { APIRoute } from "astro";
 import { getSession } from "auth-astro/server";
 
 export const GET: APIRoute = async ({ params, request, url }) => {
-  const pageSize = 20
   const session = await getSession(request);
   const accessToken = session?.access_token;
  
   if (session) {
-    const page:number = Number(url.searchParams.get('page')) || 1;
     const data = await fetch(
-      `http://localhost:8082/api/v1/admin/users?page=${page - 1}&size=${pageSize}`,
+      `http://localhost:8082/api/v1/admin/total/${params.gameID}`,
       {
         method: "GET",
         headers: {
